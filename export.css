@@ -1,0 +1,116 @@
+.export-container {
+    width: 1200px;
+    height: 675px;
+    background: #ffffff;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: "Poppins", sans-serif;
+    padding: 30px;
+    box-sizing: border-box;
+    overflow: hidden; /* important */
+}
+
+.export-inner {
+    width: calc(100%);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.export-grid {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+    box-sizing: border-box;
+    /* grid-template-columns sera fixé en JS dynamiquement */
+    justify-items: center;
+}
+
+.export-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 12px;
+    width: 220px; /* valeur de base, écrasée par JS */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.export-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 8px;
+}
+
+.export-title {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-align: center;
+}
+.export-subtitle {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+/* === Loader pendant la génération === */
+.loader-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 250, 245, 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.3s ease;
+}
+
+.loader-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid #d4b7a6;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loader-text {
+    margin-top: 16px;
+    color: #6b4f4f;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* === Watermark sur l'image exportée === */
+.export-watermark {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 14px;
+    color: rgba(0,0,0,0.4);
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    user-select: none;
+    pointer-events: none;
+}

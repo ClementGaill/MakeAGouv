@@ -24,6 +24,7 @@
     <meta name="twitter:image" content="https://clementgaill.github.io/MakeAGouv/Twitter%20post%20-%201.png">
     
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="export.css">
 </head>
 <body>
     <div class="container">
@@ -405,43 +406,205 @@
         }
 
         async function downloadImage() {
-    const pyramid = document.getElementById('pyramid');
-
     try {
-        // Récupère toutes les images visibles dans la pyramide
-        const images = pyramid.querySelectorAll('img');
+        // === Création du loader visuel ===
+        const loader = document.createElement('div');
+        loader.className = 'loader-overlay';
+        loader.innerHTML = `
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Génération de l'image...</p>
+        `;
+        document.body.appendChild(loader);
 
-        // Crée un tableau de Promises pour chaque image qui attend le chargement
-        const loadPromises = Array.from(images).map(img => {
-            return new Promise(resolve => {
-                if (img.complete && img.naturalWidth !== 0) {
-                    resolve(); // déjà chargée
-                } else {
-                    img.onload = () => resolve();
-                    img.onerror = () => resolve(); // ignore les erreurs
-                }
-            });
+        // Laisse le loader apparaître
+        await new Promise(r => setTimeout(r, 50));
+
+        // === Paramètres export ===
+        const EXPORT_W = 1200;
+        const EXPORT_H = 675;
+        const PADDING = 30;
+        const GAP = 18;
+        const MIN_COLS = 4;
+        const MIN_CARD_MIN_WIDTH = 140;
+
+        const exportContainer = document.createElement('div');
+        exportContainer.className = 'export-container';
+        exportContainer.style.width = EXPORT_W + 'px';
+        exportContainer.style.height = EXPORT_H + 'px';
+        exportContainer.style.padding = PADDING + 'px';
+        exportContainer.style.boxSizing = 'border-box';
+        exportContainer.style.overflow = 'hidden';
+        exportContainer.style.position = 'relative';
+
+        const inner = document.createElement('div');
+        inner.className = 'export-inner';
+        inner.style.width = (EXPORT_W - 2 * PADDING) + 'px';
+        inner.style.display = 'flex';
+        inner.style.flexDirection = 'column';
+        inner.style.alignItems = 'center';
+
+        // --- Titre ---
+        const title = document.createElement('div');
+        title.className = 'export-title';
+        title.textContent = 'Mon Gouvernement';
+        inner.appendChild(title);
+
+        const subtitle = document.createElement('div');
+        subtitle.className = 'export-subtitle';
+        subtitle.textContent = 'Toi aussi crée le tien sur makeagouv.fr';
+        inner.appendChild(subtitle);
+
+        // --- Premier Ministre ---
+        const pm = ministries.find(m => m.id === 'pm');
+        if (pm) {
+            const pmWrapper = document.createElement('div');
+            pmWrapper.style.display = 'flex';
+            pmWrapper.style.justifyContent = 'center';
+            pmWrapper.style.marginBottom = '18px';
+
+            const pmCard = document.createElement('div');
+            pmCard.className = 'export-card';
+            pmCard.style.width = '260px';
+            pmCard.style.padding = '14px';
+
+            const pmImg = document.createElement('img');
+            pmImg.src = pm.minister?.image || 'https://via.placeholder.com/120x120?text=👤';
+            pmImg.alt = pm.minister?.name || pm.name;
+
+            const pmMinister = document.createElement('div');
+            pmMinister.className = 'minister';
+            pmMinister.textContent = pm.minister?.name || 'À assigner';
+
+            const pmMinistry = document.createElement('div');
+            pmMinistry.className = 'ministry';
+            pmMinistry.textContent = pm.name;
+
+            pmCard.appendChild(pmImg);
+            pmCard.appendChild(pmMinister);
+            pmCard.appendChild(pmMinistry);
+            pmWrapper.appendChild(pmCard);
+            inner.appendChild(pmWrapper);
+        }
+
+        // --- Autres ministères ---
+        const otherMinistries = ministries.filter(m => m.id !== 'pm');
+        const N = otherMinistries.length;
+
+        const grid = document.createElement('div');
+        grid.className = 'export-grid';
+        grid.style.width = '100%';
+        grid.style.boxSizing = 'border-box';
+        const cardElements = [];
+
+        otherMinistries.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'export-card';
+
+            const img = document.createElement('img');
+            img.src = m.minister?.image || 'https://via.placeholder.com/120x120?text=👤';
+            img.alt = m.minister?.name || m.name;
+
+            const ministerName = document.createElement('div');
+            ministerName.className = 'minister';
+            ministerName.textContent = m.minister?.name || 'À assigner';
+
+            const ministryName = document.createElement('div');
+            ministryName.className = 'ministry';
+            ministryName.textContent = m.name;
+
+            card.appendChild(img);
+            card.appendChild(ministerName);
+            card.appendChild(ministryName);
+            grid.appendChild(card);
+            cardElements.push(card);
         });
 
-        // Attend que toutes les images soient prêtes
-        await Promise.all(loadPromises);
+        inner.appendChild(grid);
+        exportContainer.appendChild(inner);
 
-        // Capture la pyramide
-        const canvas = await html2canvas(pyramid, {
+        // === Watermark discret ===
+        const watermark = document.createElement('div');
+        watermark.textContent = 'makeagouv.fr';
+        watermark.className = 'export-watermark';
+        exportContainer.appendChild(watermark);
+
+        document.body.appendChild(exportContainer);
+
+        // --- Attente chargement des images ---
+        const images = exportContainer.querySelectorAll('img');
+        await Promise.all(Array.from(images).map(img => {
+            return new Promise(resolve => {
+                if (img.complete && img.naturalWidth !== 0) resolve();
+                else {
+                    img.onload = () => resolve();
+                    img.onerror = () => resolve();
+                }
+            });
+        }));
+
+        await new Promise(requestAnimationFrame);
+        await new Promise(requestAnimationFrame);
+
+        // --- Ajustement automatique ---
+        const innerAvailableW = EXPORT_W - 2 * PADDING;
+        const innerAvailableH = EXPORT_H - 2 * PADDING;
+
+        const maxColsByWidth = Math.max(1, Math.floor((innerAvailableW + GAP) / (MIN_CARD_MIN_WIDTH + GAP)));
+        const desiredCols = Math.min(maxColsByWidth, Math.max(MIN_COLS, Math.min(N || MIN_COLS, maxColsByWidth)));
+
+        const cols = desiredCols;
+        const cardWidth = Math.floor((innerAvailableW - (cols - 1) * GAP) / cols);
+
+        cardElements.forEach(card => {
+            card.style.width = cardWidth + 'px';
+            const img = card.querySelector('img');
+            if (img) {
+                const imgSize = Math.max(60, Math.min(120, Math.floor(cardWidth * 0.45)));
+                img.style.width = imgSize + 'px';
+                img.style.height = imgSize + 'px';
+                img.style.objectFit = 'cover';
+            }
+        });
+
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        grid.style.gap = GAP + 'px';
+
+        await new Promise(requestAnimationFrame);
+        await new Promise(requestAnimationFrame);
+
+        const contentH = inner.scrollHeight;
+        const scale = Math.min(1, innerAvailableH / contentH);
+
+        if (scale < 1) {
+            inner.style.transformOrigin = 'top center';
+            inner.style.transform = `scale(${scale})`;
+            inner.style.marginTop = Math.floor((innerAvailableH - contentH * scale) / 2) + 'px';
+        }
+
+        await new Promise(requestAnimationFrame);
+
+        // --- Capture ---
+        const canvas = await html2canvas(exportContainer, {
             backgroundColor: '#ffffff',
             scale: 2,
-            useCORS: true // au cas où les images viennent d'un autre domaine
+            useCORS: true
         });
 
         const link = document.createElement('a');
         link.download = 'mon-gouvernement.png';
         link.href = canvas.toDataURL();
         link.click();
+
+        // --- Nettoyage ---
+        document.body.removeChild(exportContainer);
+        document.body.removeChild(loader);
+
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Erreur :', error);
         alert('Erreur lors de la génération de l\'image');
     }
 }
+
 
 
         function shareTwitter() {
@@ -468,15 +631,5 @@
             }
         });
     </script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5P5VM5PH1S"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-5P5VM5PH1S');
-    </script>
-    <script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/2516e3d8c249b.js" data-cmp-host="a.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
-</body>
+    </body>
 </html>

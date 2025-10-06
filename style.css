@@ -286,6 +286,18 @@ h1 {
     transform: translateY(-2px);
 }
 
+.credits {
+    text-align: center;
+    margin-top: 20px;
+}
+.author {
+    color: var(--btn-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    align-items: center;
+}
+
 /* Modal */
 .modal {
     display: none;

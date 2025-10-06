@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créateur de Gouvernement Français</title>
+    
+    <!-- Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mon Gouvernement Français">
+    <meta name="twitter:description" content="J'ai créé mon gouvernement idéal ! Créez le vôtre maintenant.">
+    <meta name="twitter:image" content="">
+    
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Mon Gouvernement Français">
+    <meta property="og:description" content="J'ai créé mon gouvernement idéal ! Créez le vôtre maintenant.">
+    <meta property="og:image" content="">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇫🇷 Créateur de Gouvernement</h1>
+            <p class="subtitle">Composez votre gouvernement idéal (ou absurde)</p>
+        </header>
+
+        <div class="pyramid" id="pyramid">
+            <div id="ministries-container"></div>
+        </div>
+
+        <div class="actions">
+            <button class="btn" onclick="addCustomMinistry()">
+                <span>➕</span> Ajouter un Ministère
+            </button>
+            <button class="btn" onclick="downloadImage()">
+                <span>⬇️</span> Télécharger PNG
+            </button>
+            <button class="btn" onclick="shareTwitter()">
+                <span>🐦</span> Partager
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de sélection -->
+    <div class="modal" id="selectionModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <div class="modal-header">Assigner un ministre</div>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Rechercher sur Wikipedia (ex: Mickey Mouse, Emmanuel Macron...)">
+                <button class="btn btn-modal" onclick="searchWikipedia()">🔍</button>
+            </div>
+
+            <div id="searchResults" class="search-results"></div>
+
+            <div class="custom-form">
+                <div class="form-group">
+                    <label class="form-label">Ou créer une personnalité personnalisée</label>
+                    <input type="text" class="form-input" id="customName" placeholder="Nom de la personnalité">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Image (stockée localement)</label>
+                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                        <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)">
+                        <p>📁 Cliquez pour sélectionner une image</p>
+                        <img id="previewImg" class="preview-img" style="display: none;">
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-modal" style="width: 100%; justify-content: center;" onclick="assignCustomMinister()">
+                    ✅ Assigner cette personnalité
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        let ministries = [
+            { id: 'pm', name: 'Premier Ministre', minister: null, fixed: true },
+            { id: 'interior', name: 'Intérieur', minister: null },
+            { id: 'economy', name: 'Économie', minister: null },
+            { id: 'defense', name: 'Défense', minister: null },
+            { id: 'justice', name: 'Justice', minister: null },
+            { id: 'foreign', name: 'Affaires Étrangères', minister: null },
+            { id: 'education', name: 'Éducation Nationale', minister: null },
+            { id: 'health', name: 'Santé', minister: null },
+        ];
+
+        let selectedMinistryId = null;
+        let customImageData = null;
+        let draggedElement = null;
+
+        function renderMinistries() {
+            const container = document.getElementById('ministries-container');
+            container.innerHTML = '';
+
+            // Premier Ministre en premier
+            const pmRow = document.createElement('div');
+            pmRow.className = 'ministry-row';
+            const pm = ministries.find(m => m.id === 'pm');
+            pmRow.appendChild(createMinistryCard(pm));
+            container.appendChild(pmRow);
+
+            // Autres ministères en grille
+            const othersRow = document.createElement('div');
+            othersRow.className = 'ministry-row';
+            ministries.filter(m => m.id !== 'pm').forEach(ministry => {
+                othersRow.appendChild(createMinistryCard(ministry));
+            });
+            container.appendChild(othersRow);
+        }
+
+        function createMinistryCard(ministry) {
+            const card = document.createElement('div');
+            card.className = `ministry-card ${ministry.id === 'pm' ? 'prime-minister' : ''}`;
+            card.draggable = !ministry.fixed;
+            card.dataset.ministryId = ministry.id;
+
+            // Drag and drop events
+            if (!ministry.fixed) {
+                card.addEventListener('dragstart', handleDragStart);
+                card.addEventListener('dragend', handleDragEnd);
+            }
+            card.addEventListener('dragover', handleDragOver);
+            card.addEventListener('drop', handleDrop);
+            card.addEventListener('dragleave', handleDragLeave);
+
+            const avatarContainer = document.createElement('div');
+            avatarContainer.className = 'avatar-container';
+            avatarContainer.onclick = (e) => {
+                e.stopPropagation();
+                openModal(ministry.id);
+            };
+            
+            if (ministry.minister && ministry.minister.image) {
+                const img = document.createElement('img');
+                img.src = ministry.minister.image;
+                img.alt = ministry.minister.name;
+                avatarContainer.appendChild(img);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'avatar-placeholder';
+                placeholder.textContent = '👤';
+                avatarContainer.appendChild(placeholder);
+            }
+
+            const ministryName = document.createElement('div');
+            ministryName.className = 'ministry-name';
+            ministryName.contentEditable = !ministry.fixed;
+            ministryName.textContent = ministry.name;
+            ministryName.onclick = (e) => {
+                e.stopPropagation();
+            };
+            ministryName.onblur = function() {
+                const newName = this.textContent.trim();
+                if (newName) {
+                    ministry.name = newName;
+                }
+                this.classList.remove('editing');
+            };
+            ministryName.onfocus = function() {
+                this.classList.add('editing');
+            };
+            ministryName.onkeydown = function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.blur();
+                }
+            };
+
+            const ministerName = document.createElement('div');
+            ministerName.className = 'minister-name';
+            ministerName.textContent = ministry.minister ? ministry.minister.name : 'À assigner';
+
+            card.appendChild(avatarContainer);
+            card.appendChild(ministryName);
+            card.appendChild(ministerName);
+
+            if (!ministry.fixed) {
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '×';
+                removeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    removeMinistry(ministry.id);
+                };
+                card.appendChild(removeBtn);
+            }
+
+            return card;
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            document.querySelectorAll('.ministry-card').forEach(card => {
+                card.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            
+            if (this !== draggedElement && !this.classList.contains('prime-minister')) {
+                this.classList.add('drag-over');
+            }
+            return false;
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            if (draggedElement !== this && !this.classList.contains('prime-minister')) {
+                const draggedId = draggedElement.dataset.ministryId;
+                const targetId = this.dataset.ministryId;
+
+                const draggedIndex = ministries.findIndex(m => m.id === draggedId);
+                const targetIndex = ministries.findIndex(m => m.id === targetId);
+
+                if (draggedIndex !== -1 && targetIndex !== -1) {
+                    const [removed] = ministries.splice(draggedIndex, 1);
+                    ministries.splice(targetIndex, 0, removed);
+                    renderMinistries();
+                }
+            }
+
+            this.classList.remove('drag-over');
+            return false;
+        }
+
+        function openModal(ministryId) {
+            selectedMinistryId = ministryId;
+            document.getElementById('selectionModal').classList.add('active');
+            document.getElementById('searchInput').value = '';
+            document.getElementById('customName').value = '';
+            document.getElementById('searchResults').innerHTML = '';
+            document.getElementById('previewImg').style.display = 'none';
+            customImageData = null;
+        }
+
+        function closeModal() {
+            document.getElementById('selectionModal').classList.remove('active');
+            selectedMinistryId = null;
+        }
+
+        async function searchWikipedia() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '<div class="loading">🔍 Recherche en cours...</div>';
+
+            try {
+                const searchResponse = await fetch(
+                    `https://fr.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=5`
+                );
+                const searchData = await searchResponse.json();
+
+                if (searchData.query.search.length === 0) {
+                    resultsContainer.innerHTML = '<div class="empty-state">Aucun résultat trouvé sur Wikipedia</div>';
+                    return;
+                }
+
+                const results = await Promise.all(
+                    searchData.query.search.map(async (item) => {
+                        const imageResponse = await fetch(
+                            `https://fr.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(item.title)}&prop=pageimages&format=json&pithumbsize=300&origin=*`
+                        );
+                        const imageData = await imageResponse.json();
+                        const pages = imageData.query.pages;
+                        const pageId = Object.keys(pages)[0];
+                        const thumbnail = pages[pageId].thumbnail?.source || null;
+
+                        return {
+                            title: item.title,
+                            image: thumbnail,
+                        };
+                    })
+                );
+
+                resultsContainer.innerHTML = '';
+                results.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.onclick = () => assignMinister(result);
+
+                    if (result.image) {
+                        const img = document.createElement('img');
+                        img.src = result.image;
+                        img.className = 'result-img';
+                        resultItem.appendChild(img);
+                    } else {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'result-img';
+                        placeholder.style.display = 'flex';
+                        placeholder.style.alignItems = 'center';
+                        placeholder.style.justifyContent = 'center';
+                        placeholder.textContent = '👤';
+                        resultItem.appendChild(placeholder);
+                    }
+
+                    const name = document.createElement('div');
+                    name.className = 'result-name';
+                    name.textContent = result.title;
+                    resultItem.appendChild(name);
+
+                    resultsContainer.appendChild(resultItem);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                resultsContainer.innerHTML = '<div class="empty-state">Erreur lors de la recherche</div>';
+            }
+        }
+
+        function assignMinister(minister) {
+            const ministry = ministries.find(m => m.id === selectedMinistryId);
+            if (ministry) {
+                // Assure-toi que 'name' existe
+                ministry.minister = {
+                    name: minister.name || minister.title || 'Inconnu',
+                    image: minister.image || null
+                };
+                renderMinistries();
+                closeModal();
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    customImageData = e.target.result;
+                    const preview = document.getElementById('previewImg');
+                    preview.src = customImageData;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function assignCustomMinister() {
+            const name = document.getElementById('customName').value.trim();
+            if (!name) {
+                alert('Veuillez entrer un nom');
+                return;
+            }
+
+            const minister = {
+                title: name,
+                name: name,
+                image: customImageData || null
+            };
+
+            assignMinister(minister);
+        }
+
+        function addCustomMinistry() {
+            const newMinistry = {
+                id: `custom-${Date.now()}`,
+                name: 'Nouveau Ministère',
+                minister: null,
+                fixed: false
+            };
+            ministries.push(newMinistry);
+            renderMinistries();
+        }
+
+        function removeMinistry(id) {
+            ministries = ministries.filter(m => m.id !== id);
+            renderMinistries();
+        }
+
+        async function downloadImage() {
+    const pyramid = document.getElementById('pyramid');
+
+    try {
+        // Récupère toutes les images visibles dans la pyramide
+        const images = pyramid.querySelectorAll('img');
+
+        // Crée un tableau de Promises pour chaque image qui attend le chargement
+        const loadPromises = Array.from(images).map(img => {
+            return new Promise(resolve => {
+                if (img.complete && img.naturalWidth !== 0) {
+                    resolve(); // déjà chargée
+                } else {
+                    img.onload = () => resolve();
+                    img.onerror = () => resolve(); // ignore les erreurs
+                }
+            });
+        });
+
+        // Attend que toutes les images soient prêtes
+        await Promise.all(loadPromises);
+
+        // Capture la pyramide
+        const canvas = await html2canvas(pyramid, {
+            backgroundColor: '#ffffff',
+            scale: 2,
+            useCORS: true // au cas où les images viennent d'un autre domaine
+        });
+
+        const link = document.createElement('a');
+        link.download = 'mon-gouvernement.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Erreur lors de la génération de l\'image');
+    }
+}
+
+
+        function shareTwitter() {
+            const text = "J'ai créé mon gouvernement idéal ! Créez le vôtre : ";
+            const url = window.location.href;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+            window.open(twitterUrl, '_blank');
+        }
+
+        // Initialisation
+        renderMinistries();
+
+        // Recherche avec Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchWikipedia();
+            }
+        });
+
+        // Fermer le modal en cliquant à l'extérieur
+        document.getElementById('selectionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

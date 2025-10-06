@@ -1,0 +1,471 @@
+:root {
+    /* Couleurs principales */
+    --bg-body: #fff;
+    --text-body: #333;
+    --header-color: #6b4f4f;
+    --subtitle-color: #7a5c5c;
+
+    --pyramid-bg: #fff8f0;
+    --pyramid-shadow: rgba(200,180,180,0.2);
+
+    --card-bg: #fff1e6;
+    --card-border: #e8d8d0;
+    --card-hover-bg: #f7e9e1;
+    --card-hover-border: #d4b7a6;
+    --card-shadow: rgba(200,180,180,0.1);
+    --card-shadow-hover: rgba(200,180,180,0.2);
+
+    --pm-card-bg: #ffe6d9;
+    --pm-card-hover-bg: #fcd5b4;
+    --pm-text: #6b4f4f;
+
+    --avatar-border: #d4b7a6;
+    --avatar-bg: #ffe6d9;
+    --avatar-placeholder: #c49f8f;
+
+    --ministry-name-color: #7a5c5c;
+    --ministry-name-hover: #f7e9e1;
+    --ministry-name-border: #c49f8f;
+
+    --minister-name-color: #5a3f3f;
+
+    --remove-btn-bg: #d9887c;
+    --remove-btn-hover: #c47f71;
+
+    --btn-bg: #ffe6d9;
+    --btn-border: #d4b7a6;
+    --btn-hover-bg: #ffd1b3;
+    --btn-text: #6b4f4f;
+
+    --modal-bg: #fff8f0;
+    --modal-overlay: rgba(245,230,220,0.95);
+    --modal-border: #e8d8d0;
+    --modal-header: #6b4f4f;
+
+    --search-border: #e8d8d0;
+    --search-focus-border: #c49f8f;
+    --result-bg: #fff8f0;
+    --result-hover-bg: #fff1e6;
+    --result-border: #e8d8d0;
+    --result-hover-border: #c49f8f;
+    --result-name: #5a3f3f;
+
+    --file-upload-bg: #fff8f0;
+    --file-upload-border: #e8d8d0;
+    --file-upload-hover-bg: #fff1e6;
+    --file-upload-hover-border: #c49f8f;
+
+    --preview-border: #e8d8d0;
+
+    --close-modal-color: #6b4f4f;
+
+    --btn-modal-bg: #ffd1b3;
+    --btn-modal-hover-bg: #ffb285;
+    --btn-modal-border: #c49f8f;
+    --btn-modal-text: #6b4f4f;
+    --btn-modal-hover-text: #5a3f3f;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corps */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-body);
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--text-body);
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: var(--header-color);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    color: var(--subtitle-color);
+}
+
+/* Pyramide */
+.pyramid {
+    background: var(--pyramid-bg);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px var(--pyramid-shadow);
+    margin-bottom: 30px;
+}
+
+.ministry-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    min-height: 60px;
+}
+
+/* Cartes ministères */
+.ministry-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    cursor: move;
+    transition: all 0.3s ease;
+    border: 1px solid var(--card-border);
+    position: relative;
+    box-shadow: 0 5px 15px var(--card-shadow);
+}
+
+.ministry-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px var(--card-shadow-hover);
+    border-color: var(--card-hover-border);
+    background: var(--card-hover-bg);
+}
+
+.ministry-card.dragging {
+    opacity: 0.6;
+}
+
+.ministry-card.drag-over {
+    border-color: var(--card-hover-border);
+    border-style: dashed;
+    background: var(--card-hover-bg);
+}
+
+/* Premier ministre */
+.ministry-card.prime-minister {
+    width: 250px;
+    background: var(--pm-card-bg);
+    color: var(--pm-text);
+    cursor: pointer;
+}
+
+.ministry-card.prime-minister:hover {
+    background: var(--pm-card-hover-bg);
+}
+
+/* Avatar */
+.avatar-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    overflow: hidden;
+    background: var(--avatar-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--avatar-border);
+    cursor: pointer;
+}
+
+.ministry-card.prime-minister .avatar-container {
+    width: 120px;
+    height: 120px;
+    border: 4px solid var(--pm-card-bg);
+}
+
+.avatar-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    font-size: 3rem;
+    color: var(--avatar-placeholder);
+}
+
+/* Noms ministères et ministres */
+.ministry-name {
+    font-size: 0.85rem;
+    color: var(--ministry-name-color);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: text;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.ministry-name:hover {
+    background: var(--ministry-name-hover);
+}
+
+.ministry-name.editing {
+    background: #fff;
+    border: 1px solid var(--ministry-name-border);
+    outline: none;
+}
+
+.minister-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--minister-name-color);
+}
+
+/* Bouton supprimer */
+.remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--remove-btn-bg);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s, background 0.3s;
+}
+
+.ministry-card:hover .remove-btn {
+    opacity: 1;
+}
+
+.remove-btn:hover {
+    background: var(--remove-btn-hover);
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: 2px solid var(--btn-border);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+}
+
+.btn:hover {
+    background: var(--btn-hover-bg);
+    transform: translateY(-2px);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--modal-overlay);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--modal-bg);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 2px solid var(--modal-border);
+    box-shadow: 0 10px 30px var(--pyramid-shadow);
+}
+
+.modal-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--modal-header);
+}
+
+/* Recherche */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--search-border);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.search-input:focus {
+    border-color: var(--search-focus-border);
+}
+
+/* Résultats */
+.result-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border: 2px solid var(--result-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--result-bg);
+}
+
+.result-item:hover {
+    border-color: var(--result-hover-border);
+    background: var(--result-hover-bg);
+}
+
+.result-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--avatar-bg);
+}
+
+.result-name {
+    font-weight: 600;
+    color: var(--result-name);
+}
+
+/* Formulaire custom */
+.custom-form {
+    border-top: 2px solid var(--card-border);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--header-color);
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--search-border);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-input:focus {
+    border-color: var(--search-focus-border);
+}
+
+/* Upload fichier */
+#fileInput {
+    display: none !important;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+.file-upload {
+    border: 2px dashed var(--file-upload-border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--file-upload-bg);
+}
+
+.file-upload:hover {
+    border-color: var(--file-upload-hover-border);
+    background: var(--file-upload-hover-bg);
+}
+
+.preview-img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 2px solid var(--preview-border);
+}
+
+/* Bouton fermer */
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--close-modal-color);
+}
+
+/* Boutons modal */
+.btn-modal {
+    background: var(--btn-modal-bg);
+    color: var(--btn-modal-text);
+    border: 2px solid var(--btn-modal-border);
+}
+
+.btn-modal:hover {
+    background: var(--btn-modal-hover-bg);
+    border-color: var(--btn-modal-border);
+    color: var(--btn-modal-hover-text);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .pyramid {
+        padding: 20px;
+    }
+
+    .ministry-card {
+        width: 160px;
+    }
+}

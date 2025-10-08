@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MakeAGouv – Crée ton gouvernement idéal</title>
-  <meta name="description" content="Compose ton gouvernement français idéal ou absurde. Assigne des ministres réels ou fictifs et télécharge ta pyramide politique personnalisée.">
-  <meta name="keywords" content="gouvernement français, création gouvernement, ministres, politique, personnalisation, makeagouv, simulateur gouvernement">
-  <meta name="author" content="clementt.exe">
+    <title>MakeAGouv – Crée ton gouvernement idéal</title>
+    <meta name="description"
+        content="Compose ton gouvernement français idéal ou absurde. Assigne des ministres réels ou fictifs et télécharge ta pyramide politique personnalisée.">
+    <meta name="keywords"
+        content="gouvernement français, création gouvernement, ministres, politique, personnalisation, makeagouv, simulateur gouvernement">
+    <meta name="author" content="clementt.exe">
 
-  <!-- Canonical -->
-  <link rel="canonical" href="https://clementgaill.github.io/MakeAGouv/" />
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clementgaill.github.io/MakeAGouv/" />
 
-  <!-- Open Graph (Facebook, LinkedIn, etc.) -->
-  <meta property="og:title" content="MakeAGouv – Crée ton gouvernement idéal 🇫🇷">
-  <meta property="og:description" content="Compose ton gouvernement idéal ou absurde et partage ton image personnalisée.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://makeagouv.fr/">
-  <meta property="og:image" content="https://makeagouv.fr/Twitter%20post%20-%201.png">
-  <meta property="og:locale" content="fr_FR">
+    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="MakeAGouv – Crée ton gouvernement idéal 🇫🇷">
+    <meta property="og:description"
+        content="Compose ton gouvernement idéal ou absurde et partage ton image personnalisée.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://makeagouv.fr/">
+    <meta property="og:image" content="https://makeagouv.fr/Twitter%20post%20-%201.png">
+    <meta property="og:locale" content="fr_FR">
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MakeAGouv – Crée ton gouvernement idéal 🇫🇷">
-  <meta name="twitter:description" content="Compose ton gouvernement idéal et télécharge ta pyramide politique personnalisée.">
-  <meta name="twitter:image" content="https://makeagouv.fr/Twitter%20post%20-%201.png">
-  <meta name="twitter:creator" content="@clementt_exe">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MakeAGouv – Crée ton gouvernement idéal 🇫🇷">
+    <meta name="twitter:description"
+        content="Compose ton gouvernement idéal et télécharge ta pyramide politique personnalisée.">
+    <meta name="twitter:image" content="https://makeagouv.fr/Twitter%20post%20-%201.png">
+    <meta name="twitter:creator" content="@clementt_exe">
 
-  <!-- Favicon -->
-  <link rel="icon" href="https://makeagouv.fr/icon.ico" type="image/x-icon">
+    <!-- Favicon -->
+    <link rel="icon" href="https://makeagouv.fr/icon.ico" type="image/x-icon">
 
-  <!-- Sitemap hint -->
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://https://makeagouv.fr/sitemap.xml" />
+    <!-- Sitemap hint -->
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://https://makeagouv.fr/sitemap.xml" />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="export.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="export.css">
+
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TQ4DX9C8');</script>
+    <!-- End Google Tag Manager -->
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -73,9 +90,10 @@
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal()">×</button>
             <div class="modal-header">Assigner un ministre</div>
-            
+
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Rechercher sur Wikipedia (ex: Mickey Mouse, Emmanuel Macron...)">
+                <input type="text" class="search-input" id="searchInput"
+                    placeholder="Rechercher sur Wikipedia (ex: Mickey Mouse, Emmanuel Macron...)">
                 <button class="btn btn-modal" onclick="searchWikipedia()">🔍</button>
             </div>
 
@@ -95,7 +113,8 @@
                     </div>
                 </div>
                 <br>
-                <button class="btn btn-modal" style="width: 100%; justify-content: center;" onclick="assignCustomMinister()">
+                <button class="btn btn-modal" style="width: 100%; justify-content: center;"
+                    onclick="assignCustomMinister()">
                     ✅ Assigner cette personnalité
                 </button>
             </div>
@@ -161,7 +180,7 @@
                 e.stopPropagation();
                 openModal(ministry.id);
             };
-            
+
             if (ministry.minister && ministry.minister.image) {
                 const img = document.createElement('img');
                 img.src = ministry.minister.image;
@@ -181,17 +200,17 @@
             ministryName.onclick = (e) => {
                 e.stopPropagation();
             };
-            ministryName.onblur = function() {
+            ministryName.onblur = function () {
                 const newName = this.textContent.trim();
                 if (newName) {
                     ministry.name = newName;
                 }
                 this.classList.remove('editing');
             };
-            ministryName.onfocus = function() {
+            ministryName.onfocus = function () {
                 this.classList.add('editing');
             };
-            ministryName.onkeydown = function(e) {
+            ministryName.onkeydown = function (e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     this.blur();
@@ -239,7 +258,7 @@
                 e.preventDefault();
             }
             e.dataTransfer.dropEffect = 'move';
-            
+
             if (this !== draggedElement && !this.classList.contains('prime-minister')) {
                 this.classList.add('drag-over');
             }
@@ -374,7 +393,7 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     customImageData = e.target.result;
                     const preview = document.getElementById('previewImg');
                     preview.src = customImageData;
@@ -417,204 +436,204 @@
         }
 
         async function downloadImage() {
-    try {
-        // === Création du loader visuel ===
-        const loader = document.createElement('div');
-        loader.className = 'loader-overlay';
-        loader.innerHTML = `
+            try {
+                // === Création du loader visuel ===
+                const loader = document.createElement('div');
+                loader.className = 'loader-overlay';
+                loader.innerHTML = `
             <div class="loader-spinner"></div>
             <p class="loader-text">Génération de l'image...</p>
         `;
-        document.body.appendChild(loader);
+                document.body.appendChild(loader);
 
-        // Laisse le loader apparaître
-        await new Promise(r => setTimeout(r, 50));
+                // Laisse le loader apparaître
+                await new Promise(r => setTimeout(r, 50));
 
-        // === Paramètres export ===
-        const EXPORT_W = 1200;
-        const EXPORT_H = 675;
-        const PADDING = 30;
-        const GAP = 18;
-        const MIN_COLS = 4;
-        const MIN_CARD_MIN_WIDTH = 140;
+                // === Paramètres export ===
+                const EXPORT_W = 1200;
+                const EXPORT_H = 675;
+                const PADDING = 30;
+                const GAP = 18;
+                const MIN_COLS = 4;
+                const MIN_CARD_MIN_WIDTH = 140;
 
-        const exportContainer = document.createElement('div');
-        exportContainer.className = 'export-container';
-        exportContainer.style.width = EXPORT_W + 'px';
-        exportContainer.style.height = EXPORT_H + 'px';
-        exportContainer.style.padding = PADDING + 'px';
-        exportContainer.style.boxSizing = 'border-box';
-        exportContainer.style.overflow = 'hidden';
-        exportContainer.style.position = 'relative';
+                const exportContainer = document.createElement('div');
+                exportContainer.className = 'export-container';
+                exportContainer.style.width = EXPORT_W + 'px';
+                exportContainer.style.height = EXPORT_H + 'px';
+                exportContainer.style.padding = PADDING + 'px';
+                exportContainer.style.boxSizing = 'border-box';
+                exportContainer.style.overflow = 'hidden';
+                exportContainer.style.position = 'relative';
 
-        const inner = document.createElement('div');
-        inner.className = 'export-inner';
-        inner.style.width = (EXPORT_W - 2 * PADDING) + 'px';
-        inner.style.display = 'flex';
-        inner.style.flexDirection = 'column';
-        inner.style.alignItems = 'center';
+                const inner = document.createElement('div');
+                inner.className = 'export-inner';
+                inner.style.width = (EXPORT_W - 2 * PADDING) + 'px';
+                inner.style.display = 'flex';
+                inner.style.flexDirection = 'column';
+                inner.style.alignItems = 'center';
 
-        // --- Titre ---
-        const title = document.createElement('div');
-        title.className = 'export-title';
-        title.textContent = 'Mon Gouvernement';
-        inner.appendChild(title);
+                // --- Titre ---
+                const title = document.createElement('div');
+                title.className = 'export-title';
+                title.textContent = 'Mon Gouvernement';
+                inner.appendChild(title);
 
-        const subtitle = document.createElement('div');
-        subtitle.className = 'export-subtitle';
-        subtitle.textContent = 'Toi aussi crée le tien sur makeagouv.fr';
-        inner.appendChild(subtitle);
+                const subtitle = document.createElement('div');
+                subtitle.className = 'export-subtitle';
+                subtitle.textContent = 'Toi aussi crée le tien sur makeagouv.fr';
+                inner.appendChild(subtitle);
 
-        // --- Premier Ministre ---
-        const pm = ministries.find(m => m.id === 'pm');
-        if (pm) {
-            const pmWrapper = document.createElement('div');
-            pmWrapper.style.display = 'flex';
-            pmWrapper.style.justifyContent = 'center';
-            pmWrapper.style.marginBottom = '18px';
+                // --- Premier Ministre ---
+                const pm = ministries.find(m => m.id === 'pm');
+                if (pm) {
+                    const pmWrapper = document.createElement('div');
+                    pmWrapper.style.display = 'flex';
+                    pmWrapper.style.justifyContent = 'center';
+                    pmWrapper.style.marginBottom = '18px';
 
-            const pmCard = document.createElement('div');
-            pmCard.className = 'export-card';
-            pmCard.style.width = '260px';
-            pmCard.style.padding = '14px';
+                    const pmCard = document.createElement('div');
+                    pmCard.className = 'export-card';
+                    pmCard.style.width = '260px';
+                    pmCard.style.padding = '14px';
 
-            const pmImg = document.createElement('img');
-            pmImg.src = pm.minister?.image || 'https://via.placeholder.com/120x120?text=👤';
-            pmImg.alt = pm.minister?.name || pm.name;
+                    const pmImg = document.createElement('img');
+                    pmImg.src = pm.minister?.image || 'https://via.placeholder.com/120x120?text=👤';
+                    pmImg.alt = pm.minister?.name || pm.name;
 
-            const pmMinister = document.createElement('div');
-            pmMinister.className = 'minister';
-            pmMinister.textContent = pm.minister?.name || 'À assigner';
+                    const pmMinister = document.createElement('div');
+                    pmMinister.className = 'minister';
+                    pmMinister.textContent = pm.minister?.name || 'À assigner';
 
-            const pmMinistry = document.createElement('div');
-            pmMinistry.className = 'ministry';
-            pmMinistry.textContent = pm.name;
+                    const pmMinistry = document.createElement('div');
+                    pmMinistry.className = 'ministry';
+                    pmMinistry.textContent = pm.name;
 
-            pmCard.appendChild(pmImg);
-            pmCard.appendChild(pmMinister);
-            pmCard.appendChild(pmMinistry);
-            pmWrapper.appendChild(pmCard);
-            inner.appendChild(pmWrapper);
-        }
-
-        // --- Autres ministères ---
-        const otherMinistries = ministries.filter(m => m.id !== 'pm');
-        const N = otherMinistries.length;
-
-        const grid = document.createElement('div');
-        grid.className = 'export-grid';
-        grid.style.width = '100%';
-        grid.style.boxSizing = 'border-box';
-        const cardElements = [];
-
-        otherMinistries.forEach(m => {
-            const card = document.createElement('div');
-            card.className = 'export-card';
-
-            const img = document.createElement('img');
-            img.src = m.minister?.image || 'https://via.placeholder.com/120x120?text=👤';
-            img.alt = m.minister?.name || m.name;
-
-            const ministerName = document.createElement('div');
-            ministerName.className = 'minister';
-            ministerName.textContent = m.minister?.name || 'À assigner';
-
-            const ministryName = document.createElement('div');
-            ministryName.className = 'ministry';
-            ministryName.textContent = m.name;
-
-            card.appendChild(img);
-            card.appendChild(ministerName);
-            card.appendChild(ministryName);
-            grid.appendChild(card);
-            cardElements.push(card);
-        });
-
-        inner.appendChild(grid);
-        exportContainer.appendChild(inner);
-
-        // === Watermark discret ===
-        const watermark = document.createElement('div');
-        watermark.textContent = 'makeagouv.fr';
-        watermark.className = 'export-watermark';
-        exportContainer.appendChild(watermark);
-
-        document.body.appendChild(exportContainer);
-
-        // --- Attente chargement des images ---
-        const images = exportContainer.querySelectorAll('img');
-        await Promise.all(Array.from(images).map(img => {
-            return new Promise(resolve => {
-                if (img.complete && img.naturalWidth !== 0) resolve();
-                else {
-                    img.onload = () => resolve();
-                    img.onerror = () => resolve();
+                    pmCard.appendChild(pmImg);
+                    pmCard.appendChild(pmMinister);
+                    pmCard.appendChild(pmMinistry);
+                    pmWrapper.appendChild(pmCard);
+                    inner.appendChild(pmWrapper);
                 }
-            });
-        }));
 
-        await new Promise(requestAnimationFrame);
-        await new Promise(requestAnimationFrame);
+                // --- Autres ministères ---
+                const otherMinistries = ministries.filter(m => m.id !== 'pm');
+                const N = otherMinistries.length;
 
-        // --- Ajustement automatique ---
-        const innerAvailableW = EXPORT_W - 2 * PADDING;
-        const innerAvailableH = EXPORT_H - 2 * PADDING;
+                const grid = document.createElement('div');
+                grid.className = 'export-grid';
+                grid.style.width = '100%';
+                grid.style.boxSizing = 'border-box';
+                const cardElements = [];
 
-        const maxColsByWidth = Math.max(1, Math.floor((innerAvailableW + GAP) / (MIN_CARD_MIN_WIDTH + GAP)));
-        const desiredCols = Math.min(maxColsByWidth, Math.max(MIN_COLS, Math.min(N || MIN_COLS, maxColsByWidth)));
+                otherMinistries.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'export-card';
 
-        const cols = desiredCols;
-        const cardWidth = Math.floor((innerAvailableW - (cols - 1) * GAP) / cols);
+                    const img = document.createElement('img');
+                    img.src = m.minister?.image || 'https://via.placeholder.com/120x120?text=👤';
+                    img.alt = m.minister?.name || m.name;
 
-        cardElements.forEach(card => {
-            card.style.width = cardWidth + 'px';
-            const img = card.querySelector('img');
-            if (img) {
-                const imgSize = Math.max(60, Math.min(120, Math.floor(cardWidth * 0.45)));
-                img.style.width = imgSize + 'px';
-                img.style.height = imgSize + 'px';
-                img.style.objectFit = 'cover';
+                    const ministerName = document.createElement('div');
+                    ministerName.className = 'minister';
+                    ministerName.textContent = m.minister?.name || 'À assigner';
+
+                    const ministryName = document.createElement('div');
+                    ministryName.className = 'ministry';
+                    ministryName.textContent = m.name;
+
+                    card.appendChild(img);
+                    card.appendChild(ministerName);
+                    card.appendChild(ministryName);
+                    grid.appendChild(card);
+                    cardElements.push(card);
+                });
+
+                inner.appendChild(grid);
+                exportContainer.appendChild(inner);
+
+                // === Watermark discret ===
+                const watermark = document.createElement('div');
+                watermark.textContent = 'makeagouv.fr';
+                watermark.className = 'export-watermark';
+                exportContainer.appendChild(watermark);
+
+                document.body.appendChild(exportContainer);
+
+                // --- Attente chargement des images ---
+                const images = exportContainer.querySelectorAll('img');
+                await Promise.all(Array.from(images).map(img => {
+                    return new Promise(resolve => {
+                        if (img.complete && img.naturalWidth !== 0) resolve();
+                        else {
+                            img.onload = () => resolve();
+                            img.onerror = () => resolve();
+                        }
+                    });
+                }));
+
+                await new Promise(requestAnimationFrame);
+                await new Promise(requestAnimationFrame);
+
+                // --- Ajustement automatique ---
+                const innerAvailableW = EXPORT_W - 2 * PADDING;
+                const innerAvailableH = EXPORT_H - 2 * PADDING;
+
+                const maxColsByWidth = Math.max(1, Math.floor((innerAvailableW + GAP) / (MIN_CARD_MIN_WIDTH + GAP)));
+                const desiredCols = Math.min(maxColsByWidth, Math.max(MIN_COLS, Math.min(N || MIN_COLS, maxColsByWidth)));
+
+                const cols = desiredCols;
+                const cardWidth = Math.floor((innerAvailableW - (cols - 1) * GAP) / cols);
+
+                cardElements.forEach(card => {
+                    card.style.width = cardWidth + 'px';
+                    const img = card.querySelector('img');
+                    if (img) {
+                        const imgSize = Math.max(60, Math.min(120, Math.floor(cardWidth * 0.45)));
+                        img.style.width = imgSize + 'px';
+                        img.style.height = imgSize + 'px';
+                        img.style.objectFit = 'cover';
+                    }
+                });
+
+                grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                grid.style.gap = GAP + 'px';
+
+                await new Promise(requestAnimationFrame);
+                await new Promise(requestAnimationFrame);
+
+                const contentH = inner.scrollHeight;
+                const scale = Math.min(1, innerAvailableH / contentH);
+
+                if (scale < 1) {
+                    inner.style.transformOrigin = 'top center';
+                    inner.style.transform = `scale(${scale})`;
+                    inner.style.marginTop = Math.floor((innerAvailableH - contentH * scale) / 2) + 'px';
+                }
+
+                await new Promise(requestAnimationFrame);
+
+                // --- Capture ---
+                const canvas = await html2canvas(exportContainer, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true
+                });
+
+                const link = document.createElement('a');
+                link.download = 'mon-gouvernement.png';
+                link.href = canvas.toDataURL();
+                link.click();
+
+                // --- Nettoyage ---
+                document.body.removeChild(exportContainer);
+                document.body.removeChild(loader);
+
+            } catch (error) {
+                console.error('Erreur :', error);
+                alert('Erreur lors de la génération de l\'image');
             }
-        });
-
-        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-        grid.style.gap = GAP + 'px';
-
-        await new Promise(requestAnimationFrame);
-        await new Promise(requestAnimationFrame);
-
-        const contentH = inner.scrollHeight;
-        const scale = Math.min(1, innerAvailableH / contentH);
-
-        if (scale < 1) {
-            inner.style.transformOrigin = 'top center';
-            inner.style.transform = `scale(${scale})`;
-            inner.style.marginTop = Math.floor((innerAvailableH - contentH * scale) / 2) + 'px';
         }
-
-        await new Promise(requestAnimationFrame);
-
-        // --- Capture ---
-        const canvas = await html2canvas(exportContainer, {
-            backgroundColor: '#ffffff',
-            scale: 2,
-            useCORS: true
-        });
-
-        const link = document.createElement('a');
-        link.download = 'mon-gouvernement.png';
-        link.href = canvas.toDataURL();
-        link.click();
-
-        // --- Nettoyage ---
-        document.body.removeChild(exportContainer);
-        document.body.removeChild(loader);
-
-    } catch (error) {
-        console.error('Erreur :', error);
-        alert('Erreur lors de la génération de l\'image');
-    }
-}
 
 
 
@@ -629,14 +648,14 @@
         renderMinistries();
 
         // Recherche avec Enter
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 searchWikipedia();
             }
         });
 
         // Fermer le modal en cliquant à l'extérieur
-        document.getElementById('selectionModal').addEventListener('click', function(e) {
+        document.getElementById('selectionModal').addEventListener('click', function (e) {
             if (e.target === this) {
                 closeModal();
             }
@@ -645,11 +664,16 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5P5VM5PH1S"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-5P5VM5PH1S');
+        gtag('config', 'G-5P5VM5PH1S');
     </script>
-    </body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TQ4DX9C8" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+</body>
+
 </html>
